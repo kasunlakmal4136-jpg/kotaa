@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Githimi Gimhani | Visionary Empire of Elegance</title>
+    <!-- Google Fonts + Font Awesome 6 + GSAP & ScrollTrigger -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #f0f3ff;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            position: relative;
+        }
+
+        /* ---------- MOVING BACKGROUND SLIDESHOW (3 images) ---------- */
+        .bg-slideshow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+            overflow: hidden;
+        }
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+        .slide-1 { background-image: url('https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1600'); }
+        .slide-2 { background-image: url('https://images.pexels.com/photos/931177/pexels-photo-931177.jpeg?auto=compress&cs=tinysrgb&w=1600'); }
+        .slide-3 { background-image: url('https://images.pexels.com/photos/2147488/pexels-photo-2147488.jpeg?auto=compress&cs=tinysrgb&w=1600'); }
+        
+        /* Ken Burns slow zoom & pan */
+        @keyframes kenBurns {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.08) translate(-2%, -2%); }
+        }
+        .ken-burns {
+            animation: kenBurns 20s ease-in-out infinite alternate;
+        }
+        
+        /* Crossfade cycle */
+        .slide-1 { animation: fade1 18s infinite; }
+        .slide-2 { animation: fade2 18s infinite; }
+        .slide-3 { animation: fade3 18s infinite; }
+        
+        @keyframes fade1 {
+            0%, 33% { opacity: 1; }
+            34%, 100% { opacity: 0; }
+        }
+        @keyframes fade2 {
+            0%, 33% { opacity: 0; }
+            34%, 66% { opacity: 1; }
+            67%, 100% { opacity: 0; }
+        }
+        @keyframes fade3 {
+            0%, 66% { opacity: 0; }
+            67%, 100% { opacity: 1; }
+        }
+        
+        .bg-gradient-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(0,0,0,0.65), #020617 95%);
+            z-index: -2;
+        }
+        
+        .animated-glow {
+            position: fixed;
+            top: -20%;
+            left: -20%;
+            width: 140%;
+            height: 140%;
+            background: radial-gradient(circle, rgba(56,189,248,0.1), transparent 70%);
+            animation: slowDrift 28s infinite alternate;
+            z-index: -1;
+            pointer-events: none;
+        }
+        @keyframes slowDrift {
+            0% { transform: translate(0,0) scale(1); opacity: 0.3; }
+            100% { transform: translate(5%, 8%) scale(1.3); opacity: 0.6; }
+        }
+
+        /* glass cards */
+        .glass-card {
+            background: rgba(15, 25, 45, 0.65);
+            backdrop-filter: blur(14px);
+            border-radius: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 25px 45px -12px rgba(0,0,0,0.5);
+            transition: all 0.4s cubic-bezier(0.2,0.9,0.4,1.1);
+        }
+        .glass-card:hover {
+            border-color: rgba(56, 189, 248, 0.5);
+            transform: translateY(-6px);
+            box-shadow: 0 30px 50px -15px rgba(0,0,0,0.6);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* --- Sinhala Alert Message (stylish) --- */
+        .sinhala-alert {
+            margin: 1rem auto 0;
+            max-width: 800px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(56, 189, 248, 0.15));
+            backdrop-filter: blur(12px);
+            border-left: 5px solid #facc15;
+            border-radius: 1.5rem;
+            padding: 1rem 1.8rem;
+            text-align: center;
+            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #ffe6b3;
+            letter-spacing: 0.3px;
+            box-shadow: 0 10px 25px -8px rgba(0,0,0,0.4);
+            animation: pulseGlow 2s infinite alternate;
+        }
+        @keyframes pulseGlow {
+            0% { border-left-color: #facc15; box-shadow: 0 0 5px rgba(250,204,21,0.3); }
+            100% { border-left-color: #ffb347; box-shadow: 0 0 18px rgba(250,204,21,0.6); }
+        }
+        .sinhala-alert i {
+            margin-right: 10px;
+            color: #facc15;
+            font-size: 1.3rem;
+        }
+
+        /* hero section */
+        .hero {
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+        .hero-content h1 {
+            font-size: 4.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFF, #a5b4fc, #38bdf8);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+        .typed-text {
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+            color: #cbd5ff;
+            margin-top: 0.5rem;
+            font-weight: 400;
+        }
+        .btn-glow {
+            background: linear-gradient(95deg, #4f46e5, #38bdf8);
+            border: none;
+            padding: 1rem 2.2rem;
+            border-radius: 3rem;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(56,189,248,0.5);
+            margin-top: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-glow:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 28px #38bdf8;
+        }
+
+        /* about section */
+        .about-section {
+            margin: 2rem 0 3rem;
+            padding: 2rem;
+            border-radius: 2rem;
+            background: linear-gradient(135deg, rgba(15,25,45,0.7), rgba(8,15,30,0.8));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(56,189,248,0.2);
+        }
+        .about-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: center;
+        }
+        .about-text {
+            flex: 2;
+        }
+        .about-text h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff, #94a3f8);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .about-text p {
+            line-height: 1.6;
+            color: #cbd5ff;
+            margin-bottom: 1rem;
+        }
+        .about-stats {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .stat-badge {
+            background: rgba(56,189,248,0.1);
+            border-radius: 2rem;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid rgba(56,189,248,0.3);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 3rem 0 2rem;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #38bdf8, #c084fc);
+            border-radius: 4px;
+        }
+
+        /* product grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0 3rem;
+        }
+        .product-card {
+            background: rgba(10, 18, 32, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 1.8rem;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .product-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 1.5rem;
+            margin-bottom: 1rem;
+            transition: transform 0.4s;
+        }
+        .product-card:hover .product-img {
+            transform: scale(1.02);
+        }
+        .price-tag {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #facc15;
+            margin: 0.7rem 0;
+        }
+        .product-inquire {
+            background: rgba(56,189,248,0.2);
+            border: 1px solid #38bdf8;
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .product-inquire:hover {
+            background: #38bdf8;
+            color: #0a0c15;
+        }
+
+        /* booking form (full width) */
+        .booking-section {
+            margin: 3rem 0;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .booking-box {
+            background: rgba(15, 25, 45, 0.75);
+            backdrop-filter: blur(16px);
+            border-radius: 2rem;
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+        .booking-box h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.8rem;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 1.2rem;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+        }
+        button {
+            background: linear-gradient(95deg, #2563eb, #38bdf8);
+            border: none;
+            padding: 0.9rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+        button:hover {
+            transform: scale(1.02);
+            background: linear-gradient(95deg, #1e40af, #0284c7);
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .toast-msg {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #0f172ad9;
+            backdrop-filter: blur(16px);
+            border-radius: 50px;
+            padding: 0.8rem 1.5rem;
+            z-index: 2000;
+            border-left: 4px solid #38bdf8;
+            font-weight: 500;
+        }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 10px; }
+
+        @media (max-width: 950px) {
+            .hero-content h1 { font-size: 2.8rem; }
+            .container { padding: 0 1.2rem; }
+            .about-grid { flex-direction: column; }
+            .booking-section { padding: 0 0.5rem; }
+            .sinhala-alert { font-size: 0.9rem; padding: 0.8rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+<!-- MOVING BACKGROUND SLIDESHOW (3 images with crossfade + ken burns) -->
+<div class="bg-slideshow">
+    <div class="slide slide-1 ken-burns"></div>
+    <div class="slide slide-2 ken-burns"></div>
+    <div class="slide slide-3 ken-burns"></div>
+</div>
+<div class="bg-gradient-overlay"></div>
+<div class="animated-glow"></div>
+
+<div class="container">
+    <!-- Sinhala Stylish Message -->
+    <div class="sinhala-alert">
+        <i class="fas fa-exclamation-triangle"></i> 
+        මට මාර වැඩ යකෝ තොපිට කෝල් කරන්ඩ වෙලාවක් නෑ — තොපි ඕන්නම් මේක fill කරලා මාව contact කරගනියව්
+        <i class="fas fa-smile-wink"></i>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Githimi Gimhani</h1>
+            <div class="typed-text" id="typedLine"></div>
+            <a href="#bookingSection" class="btn-glow"><i class="fas fa-calendar-check"></i> Book Exclusive Consultation</a>
+        </div>
+    </div>
+
+    <!-- About the Visionary -->
+    <div class="about-section">
+        <div class="about-grid">
+            <div class="about-text">
+                <h2><i class="fas fa-crown"></i> The Visionary Behind the Empire</h2>
+                <p>Githimi Gimhani is a globally recognized business magnate, serial entrepreneur, and philanthropist known for merging timeless elegance with cutting-edge innovation. With a portfolio spanning luxury floriculture, gourmet cuisine, elite tech accessories, and hospitality, Githimi has redefined modern opulence.</p>
+                <p>Featured in Forbes "30 Under 30 Asia" and recognized as "Luxury Innovator of the Year", her ventures operate across 14 countries. Her flagship collections — from handcrafted floral art to the legendary Apooru smart accessories — are coveted by connoisseurs worldwide.</p>
+                <p>Beyond business, Githimi champions sustainable luxury and women in entrepreneurship, making her a true icon of grace and power.</p>
+            </div>
+            <div class="about-stats">
+                <div class="stat-badge"><i class="fas fa-globe-asia"></i> <strong>14+</strong> Countries</div>
+                <div class="stat-badge"><i class="fas fa-trophy"></i> <strong>27</strong> Industry Awards</div>
+                <div class="stat-badge"><i class="fas fa-hand-holding-heart"></i> <strong>$2M+</strong> Charity Impact</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Showcase -->
+    <div>
+        <div class="section-title">✨ Signature Collections</div>
+        <div class="product-grid">
+            <div class="product-card">
+                <img class="product-img" src="https://cdn.pixabay.com/photo/2020/01/06/18/06/rose-4745390_640.jpg" alt="Luxury Flowers">
+                <h3><i class="fas fa-leaf"></i> Eternal Petals</h3>
+                <p>Exotic orchids, peonies & preserved roses.</p>
+                <div class="price-tag">$89 – $450</div>
+                <button class="product-inquire" data-product="Flowers">Inquire</button>
+            </div>
+            <div class="product-card">
+                <img class="product-img" src="https://cdn.pixabay.com/photo/2017/12/09/08/18/pizza-3007395_640.jpg" alt="Artisan Pizza">
+                <h3><i class="fas fa-pizza-slice"></i> Truffle Artisan Pizza</h3>
+                <p>Wood-fired, burrata & gold leaf.</p>
+                <div class="price-tag">$45 – $120</div>
+                <button class="product-inquire" data-product="Pizza">Order</button>
+            </div>
+            <div class="product-card">
+                <img class="product-img" src="https://cdn.pixabay.com/photo/2022/12/11/11/54/smartwatch-7649325_640.jpg" alt="Apooru Elite Collection">
+                <h3><i class="fas fa-gem"></i> Apooru Elite</h3>
+                <p>Limited edition smartwear & luxury gadgets.</p>
+                <div class="price-tag">$499 – $1299</div>
+                <button class="product-inquire" data-product="Apooru">Reserve</button>
+            </div>
+            <div class="product-card">
+                <img class="product-img" src="https://cdn.pixabay.com/photo/2018/03/23/19/55/lasagna-3254049_640.jpg" alt="Lasagna Magnifica">
+                <h3><i class="fas fa-oven"></i> Lasagna Magnifica</h3>
+                <p>Wagyu beef, 4 cheeses, slow-cooked.</p>
+                <div class="price-tag">$65 – $210</div>
+                <button class="product-inquire" data-product="Lasagna">Chef's Special</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="glass-card" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; margin: 3rem 0; padding: 2rem;">
+        <div style="text-align: center;"><i class="fas fa-chart-line fa-2x" style="color:#38bdf8"></i><h2 class="counter" data-target="158">0</h2><p>Happy Clients</p></div>
+        <div style="text-align: center;"><i class="fas fa-globe fa-2x" style="color:#c084fc"></i><h2 class="counter" data-target="24">0</h2><p>Global Partners</p></div>
+        <div style="text-align: center;"><i class="fas fa-calendar-week fa-2x" style="color:#facc15"></i><h2 class="counter" data-target="340">0</h2><p>Appointments Done</p></div>
+        <div style="text-align: center;"><i class="fas fa-star fa-2x" style="color:#ff80bf"></i><h2 class="counter" data-target="100">0</h2><p>Premium Products</p></div>
+    </div>
+
+    <!-- BOOKING SECTION (No Admin) -->
+    <div id="bookingSection" class="booking-section">
+        <div class="booking-box">
+            <h2><i class="fas fa-calendar-plus"></i> Schedule VIP Appointment</h2>
+            <form id="appointmentForm">
+                <div class="form-group"><label><i class="fas fa-user"></i> Full Name *</label><input type="text" id="fullName" required></div>
+                <div class="form-group"><label><i class="fas fa-phone"></i> Phone *</label><input type="tel" id="phone" required></div>
+                <div class="form-group"><label><i class="fas fa-envelope"></i> Email</label><input type="email" id="email"></div>
+                <div class="form-group"><label><i class="fas fa-calendar-day"></i> Date *</label><input type="date" id="appDate" required></div>
+                <div class="form-group"><label><i class="fas fa-clock"></i> Time *</label><input type="time" id="appTime" required></div>
+                <div class="form-group"><label><i class="fas fa-shopping-bag"></i> Product Interest</label>
+                    <select id="interestProduct">
+                        <option value="Flowers">Flowers</option>
+                        <option value="Pizza">Pizza</option>
+                        <option value="Apooru">Apooru Elite Collection</option>
+                        <option value="Lasagna">Lasagna</option>
+                        <option value="Consultation">Business Consultation</option>
+                    </select>
+                </div>
+                <div class="form-group"><label><i class="fas fa-comment"></i> Message</label><textarea rows="3" id="notes"></textarea></div>
+                <button type="submit"><i class="fas fa-check-circle"></i> Confirm Appointment</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p><i class="fas fa-crown"></i> Githimi Gimhani Enterprises — Where Vision Meets Legacy</p>
+        <p style="margin-top: 0.5rem;">© 2026 — Elegance Redefined</p>
+    </footer>
+</div>
+
+<script>
+    // GSAP + ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.from(".hero-content", { opacity: 0, y: 70, duration: 1.2, ease: "back.out(0.6)" });
+    gsap.from(".sinhala-alert", { opacity: 0, y: -30, duration: 0.8, delay: 0.2 });
+    gsap.from(".about-section", { opacity: 0, x: -40, duration: 1, scrollTrigger: { trigger: ".about-section", start: "top 85%" } });
+    gsap.from(".product-card", { opacity: 0, y: 50, stagger: 0.12, duration: 0.9, scrollTrigger: { trigger: ".product-grid", start: "top 85%" } });
+    gsap.from(".booking-box", { opacity: 0, scale: 0.96, duration: 0.8, scrollTrigger: { trigger: "#bookingSection", start: "top 80%" } });
+
+    // Typed text animation
+    const typedElement = document.getElementById('typedLine');
+    const phrases = ["🌹 Luxury Flowers | 🍕 Artisan Pizza | ⌚ Apooru Elite | 🍝 Lasagna", "Global Business Magnate", "Elegance Meets Innovation", "Book Your Exclusive Appointment"];
+    let idx = 0, charIdx = 0, isDeleting = false;
+    function typeEffect() {
+        let current = phrases[idx];
+        if (isDeleting) typedElement.innerText = current.substring(0, charIdx--);
+        else typedElement.innerText = current.substring(0, charIdx++);
+        if (!isDeleting && charIdx === current.length) { isDeleting = true; setTimeout(typeEffect, 1800); }
+        else if (isDeleting && charIdx === 0) { isDeleting = false; idx = (idx + 1) % phrases.length; setTimeout(typeEffect, 300); }
+        else setTimeout(typeEffect, 70);
+    }
+    typeEffect();
+
+    // Counter animation
+    const counters = document.querySelectorAll('.counter');
+    const animateCounters = () => {
+        counters.forEach(counter => {
+            const target = +counter.getAttribute('data-target');
+            let count = 0;
+            const update = () => {
+                const increment = target / 40;
+                if (count < target) { count += Math.ceil(increment); counter.innerText = count; requestAnimationFrame(update); }
+                else counter.innerText = target;
+            };
+            update();
+        });
+    };
+    ScrollTrigger.create({ trigger: ".counter", start: "top 85%", onEnter: animateCounters, once: true });
+
+    // Toast notification system
+    function showToast(msg, color = "#38bdf8") {
+        let existing = document.querySelector(".toast-msg");
+        if (existing) existing.remove();
+        let div = document.createElement("div");
+        div.className = "toast-msg";
+        div.innerHTML = `<i class="fas fa-bell"></i> ${msg}`;
+        div.style.borderLeftColor = color;
+        document.body.appendChild(div);
+        setTimeout(() => div.remove(), 3200);
+    }
+
+    // Booking form handler
+    const bookingForm = document.getElementById("appointmentForm");
+    bookingForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("fullName").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const date = document.getElementById("appDate").value;
+        const time = document.getElementById("appTime").value;
+        const interest = document.getElementById("interestProduct").value;
+        const notes = document.getElementById("notes").value;
+        
+        if (!name || !phone || !date || !time) {
+            showToast("⚠️ Please fill all required fields (Name, Phone, Date, Time)", "#f97316");
+            return;
+        }
+        const today = new Date().toISOString().split('T')[0];
+        if (date < today) {
+            showToast("📅 Future date required", "#f97316");
+            return;
+        }
+        // store in localStorage for reference
+        const newBooking = { id: Date.now(), name, phone, email, date, time, interest, notes, createdAt: new Date().toLocaleString() };
+        let existingBookings = localStorage.getItem("gimhani_public_bookings");
+        let bookings = existingBookings ? JSON.parse(existingBookings) : [];
+        bookings.unshift(newBooking);
+        localStorage.setItem("gimhani_public_bookings", JSON.stringify(bookings));
+        
+        showToast("✅ Your VIP appointment request has been sent! Our team will contact you shortly.", "#22c55e");
+        bookingForm.reset();
+        document.getElementById("appDate").value = "";
+        document.getElementById("appTime").value = "";
+    });
+
+    // Product inquiry toasts
+    document.querySelectorAll(".product-inquire").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            const product = btn.getAttribute("data-product");
+            showToast(`✨ Inquired about ${product} — our luxury concierge will reach out soon.`, "#facc15");
+        });
+    });
+
+    // Set min date for date picker
+    const dateInput = document.getElementById("appDate");
+    if (dateInput) dateInput.min = new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>
